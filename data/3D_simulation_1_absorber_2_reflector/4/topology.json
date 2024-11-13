@@ -1,0 +1,17 @@
+{
+"time_step": 1e-05,
+"number_of_molecules": 500000,
+"diff_coef": 400,
+"sim_time": 0.416667,
+"absorbers": [
+[7.92855,-6.17037,12.4525,6]
+],
+"reflectors": [
+[16.7323,6.15366,11.0979,6],
+[20.5668,-1.83552,-12.2327,6]
+],
+"reflector_prisms": [
+],
+"absorber_prisms": [
+]
+}
