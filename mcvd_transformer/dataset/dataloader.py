@@ -1,4 +1,4 @@
-from keras.utils.data_utils import Sequence  # type: ignore
+from tensorflow.keras.utils import Sequence  # type: ignore
 import numpy as np
 
 
@@ -17,7 +17,6 @@ class BatchGenerator(Sequence):
         max_spherical_entity=15,
         flatten=True,
         one_absorber_points=0,
-        line_of_sight=False,
         random_seed=50,
     ):
 
@@ -32,18 +31,33 @@ class BatchGenerator(Sequence):
         self.max_spherical_entity = max_spherical_entity
         self.flatten = flatten
         self.one_absorber_points = one_absorber_points
-        self.line_of_sight = line_of_sight
+        self.current_index = 0
         np.random.seed(random_seed)
 
     def __len__(self):
-        return (np.ceil(len(self.input) / float(self.batch_size))).astype(np.int)
+        return (np.ceil(len(self.input) / float(self.batch_size))).astype(int)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current_index < len(self):
+            batch = self.__getitem__(self.current_index)
+            self.current_index += 1
+            return batch
+        else:
+            self.current_index = 0  # Reset index for the next iteration
+            if self.shuffle:
+                np.random.shuffle(self.input)
+            raise StopIteration
 
     def __getitem__(self, idx):
 
         # Take Input Batch
         batch_x = self.input[idx * self.batch_size : (idx + 1) * self.batch_size]
+        batch_x_los = [el.line_of_sight for el in batch_x]
 
-        # Generate Time Output Batch
+        # Genrate Time Output Batch
         batch_y_time = np.array([x.time_output for x in batch_x])
         # Apply Zero Padding
         batch_y_time = np.concatenate(
@@ -90,17 +104,30 @@ class BatchGenerator(Sequence):
         else:
             topology_inputs = []
             numerical_inputs = []
-            for x in batch_x:
+            for x, los in zip(batch_x, batch_x_los):
                 numpy_repr = x.convert_numpy(
                     self.coordinate_system,
                     self.max_spherical_entity,
                     self.entity_order,
                     self.flatten,
                     self.one_absorber_points,
-                    self.line_of_sight,
                 )
                 topology_inputs.append(numpy_repr[0])
-                numerical_inputs.append(numpy_repr[1])
+                numerical_inputs.append(
+                    np.hstack(
+                        (
+                            numpy_repr[1],
+                            np.array(
+                                [
+                                    los[0] / los[-1],
+                                    los[1] / los[-1],
+                                    los[2] / los[-1],
+                                    los[3] / los[-1],
+                                ]
+                            ),
+                        )
+                    )
+                )
 
             batch_input = [
                 np.asarray(topology_inputs).astype(np.float32),
@@ -110,4 +137,4 @@ class BatchGenerator(Sequence):
         if idx == len(self) - 1 and self.shuffle:
             np.random.shuffle(self.input)
 
-        return batch_input, batch_output
+        return tuple(batch_input), tuple(batch_output)

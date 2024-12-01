@@ -25,42 +25,30 @@ class DataParser:
     def list_simulations(self):
         simulation_list = []
 
-        for simulation_folder in os.listdir(self.base_directory):
-            if simulation_folder in self.unwanted_folders:
+        for case_folder in os.listdir(self.base_directory):
+            if case_folder in self.unwanted_folders:
                 continue
-            for case_folder in os.listdir(
-                self.base_directory + os.path.sep + simulation_folder
-            ):
-                if "prism" in case_folder and (not self.include_prism):
+            if "prism" in case_folder and (not self.include_prism):
+                continue
+            case_folder_path = self.base_directory + os.path.sep + case_folder
+            for repetition_num in os.listdir(case_folder_path):
+                repetition_path = case_folder_path + os.path.sep + repetition_num
+                additional_control_results = [
+                    control(repetition_path) for control in self.additional_controls
+                ]
+                if False in additional_control_results:
                     continue
-                case_folder_path = simulation_folder + os.path.sep + case_folder
-                for repetition_num in os.listdir(
-                    self.base_directory + os.path.sep + case_folder_path
-                ):
-                    repetition_path = case_folder_path + os.path.sep + repetition_num
-                    additional_control_results = [
-                        control(self.base_directory + os.path.sep + repetition_path)
-                        for control in self.additional_controls
-                    ]
-                    if False in additional_control_results:
-                        continue
-                    simulation_list.append(
-                        case_folder_path + os.path.sep + repetition_num
-                    )
+                simulation_list.append(case_folder_path + os.path.sep + repetition_num)
 
         return sorted(simulation_list)
 
-    def parse_data(
-        self, enable_time_output=True, enable_angle_output=True, time_step_threshold=0
-    ):
+    def parse_data(self, enable_time_output=True, time_step_threshold=0):
 
         simulation_list = self.list_simulations()
 
         data_set = []
 
-        for simulation in tqdm(simulation_list):
-            # Simulation Path
-            simulation_path = self.base_directory + os.path.sep + simulation
+        for simulation_path in tqdm(simulation_list):
             # Parse Channel Config
             channel_config = json.load(
                 open(simulation_path + os.path.sep + "topology.json")
