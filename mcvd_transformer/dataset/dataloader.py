@@ -1,4 +1,4 @@
-from keras.utils.data_utils import Sequence
+from keras.utils.data_utils import Sequence  # type: ignore
 import numpy as np
 
 
@@ -43,7 +43,7 @@ class BatchGenerator(Sequence):
         # Take Input Batch
         batch_x = self.input[idx * self.batch_size : (idx + 1) * self.batch_size]
 
-        # Genrate Time Output Batch
+        # Generate Time Output Batch
         batch_y_time = np.array([x.time_output for x in batch_x])
         # Apply Zero Padding
         batch_y_time = np.concatenate(
