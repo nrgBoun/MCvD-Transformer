@@ -1,0 +1,14 @@
+black[jupyter]
+isort
+
+astropy==5.3.4
+ipython==7.34.0
+matplotlib==3.7.1
+numpy==1.25.2
+opencv-python==4.8.0.74
+plotly==5.15.0
+scipy==1.11.4
+tqdm==4.66.2
+
+tensorflow==2.11.0
+keras==2.11.0
