@@ -1,17 +1,1 @@
-{
-"time_step": 1e-05,
-"number_of_molecules": 500000,
-"diff_coef": 350,
-"sim_time": 1.54286,
-"absorbers": [
-[19.8477,-2.36904,-0.676069,2]
-],
-"reflectors": [
-[0.949287,2.1514,-14.8145,2],
-[15.212,0.218751,11.3819,6]
-],
-"reflector_prisms": [
-],
-"absorber_prisms": [
-]
-}
+{"time_step": 1e-05, "number_of_molecules": 500000, "diff_coef": 350, "sim_time": 1.54286, "absorbers": [[19.8477, -2.36904, -0.676069, 2]], "reflectors": [[0.949287, 2.1514, -14.8145, 2], [15.212, 0.218751, 11.3819, 6]], "reflector_prisms": [], "absorber_prisms": [], "line_of_sight": [[0, 0, 0, 0, 0, 500]]}
