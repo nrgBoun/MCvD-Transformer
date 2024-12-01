@@ -1,6 +1,7 @@
 from keras.layers import MultiHeadAttention, Dense, LayerNormalization, Dropout, Layer  # type: ignore
 from keras import Sequential
 import logging
+import tensorflow as tf
 
 logging.getLogger("tensorflow").setLevel(logging.ERROR)  # suppress warnings
 
@@ -48,3 +49,14 @@ class TransformerBlock(Layer):
             }
         )
         return config
+
+
+def postprocess(input):
+    # Take the first derivative of the input
+    input_diff = input[1:] - input[:-1]
+    # Remove negative values from first derivative
+    input_diff_processed = tf.nn.relu(input_diff)
+    # Calculate Cumulative Sum
+    input_processed = tf.cumsum(tf.concat([[input[0]], input_diff_processed], 0))
+    # Scale inside 1 and 0
+    return input_processed / input_processed[-1]
