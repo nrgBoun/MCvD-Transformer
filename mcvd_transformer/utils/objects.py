@@ -296,8 +296,6 @@ class Topology:
         # Diffusion Coefficient
         diff_coef = channel_config["diff_coef"]
 
-        # line_of_sight = channel_config["line_of_sight"][intended_index]
-
         return Topology(
             absorbers[intended_index],
             absorbers[:intended_index] + absorbers[intended_index + 1 :],
@@ -305,7 +303,7 @@ class Topology:
             absorber_prisms,
             reflector_prisms,
             diff_coef,
-            None,
+            channel_config["line_of_sight"][intended_index],
         )
 
     @staticmethod
