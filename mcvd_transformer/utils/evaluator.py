@@ -144,7 +144,6 @@ class PerformanceEvaluator:
         if expension_ratio != 1:
             ax1.set_ylim((0, time_output_actual[-1] * expension_ratio))
 
-        print("asdasd")
         plt.ylim(0, 0.3)
         plt.xlabel("Time Step")
         plt.ylabel("Ratio of Absorbed Molecules (Cumulative)")

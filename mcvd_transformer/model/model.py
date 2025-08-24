@@ -11,6 +11,7 @@ from .metrics import (
     max_squared_loss,
     r2_score,
     max_loss,
+    dummy_loss
 )
 import tensorflow as tf
 
@@ -56,7 +57,7 @@ def create_model(input_topology_shape, input_topology_constants_shape):
             weighted_loss(max_squared_loss, beta),
         ],
         optimizer=Adam(),
-        metrics=[r2_score, max_loss, max_loss],
+        metrics=[r2_score, max_loss, dummy_loss],
     )
 
     return model, alpha, beta

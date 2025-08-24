@@ -9,6 +9,6 @@ opencv-python==4.8.0.74
 plotly==5.15.0
 scipy==1.11.4
 tqdm==4.66.2
-
-tensorflow==2.11.0
-keras==2.11.0
+scikit_learn==1.6.1
+tensorflow[and-cuda]==2.16.1
+keras==3.5.0

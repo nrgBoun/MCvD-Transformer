@@ -3,12 +3,8 @@ name: mcvd_transformer
 channels:
   - defaults
   - conda-forge
-  - nvidia/label/cuda-11.7.1
 dependencies:
-  - python=3.9
-  - cudatoolkit=11.7
-  - cudnn=8.1.0
-  - cuda-nvcc
+  - python=3.11
   - pip
   - pip:
       - -r requirements.txt

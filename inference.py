@@ -161,8 +161,8 @@ def predict_cir(
     if hasattr(topology, 'time_output'):
         predicted_shape = predicted_cir / predicted_cir[-1]
         actual_shape = topology.time_output / topology.time_output[-1]
-        shape_error = np.mean(np.abs(predicted_shape - actual_shape))
-        max_error = np.abs(max_value - topology.time_output[-1]) / topology.time_output[-1]
+        shape_error = float(np.mean(np.abs(predicted_shape - actual_shape)))
+        max_error = float(np.abs(max_value - topology.time_output[-1]) / topology.time_output[-1])
     
     return predicted_cir, shape_error, max_error
 
